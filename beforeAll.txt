@@ -1,0 +1,17 @@
+Antes de ejecutar el backend, debes de crear un entorno virtual y activarlo (ademas de instalar dependencias)
+para esto, de mueves a la carpeta de backend con " cd backend" y luego
+usas el comando:
+python -m venv .venv
+con eso creas un entorno virtual, luego lo activas con solamente el comando:
+ .\.venv\Scripts\activate
+luego que lo actives, instalas dependencias de fastapi con:
+pip install fastapi uvicorn
+
+
+luego de esto, solamente con ejecutar esto se corre el servidor:
+uvicorn main:app --reload
+
+el servidor de fastapi se ve en:
+http://127.0.0.1:8000/docs
+
+
