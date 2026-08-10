@@ -12,7 +12,7 @@ class UsuarioCreate(UsuarioBase):
 class UsuarioOut(UsuarioBase):
     idUsuario: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AspiranteCreate(BaseModel):
     idUsuario: int
@@ -24,7 +24,7 @@ class AspiranteCreate(BaseModel):
 class AspiranteOut(AspiranteCreate):
     idAspirante: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 
@@ -38,7 +38,7 @@ class AlumnoCreate(BaseModel):
 class AlumnoOut(AlumnoCreate):
     idAlumno: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 from pydantic import BaseModel
 
 class DocenteCreate(BaseModel):
@@ -50,7 +50,7 @@ class DocenteCreate(BaseModel):
 class DocenteOut(DocenteCreate):
     idDocente: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 from pydantic import BaseModel
 
@@ -61,7 +61,7 @@ class CarreraCreate(BaseModel):
 class CarreraOut(CarreraCreate):
     idCarrera: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 from pydantic import BaseModel
 
@@ -75,7 +75,7 @@ class GrupoCreate(BaseModel):
 class GrupoOut(GrupoCreate):
     idGrupo: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 from pydantic import BaseModel
 
 class MateriaCreate(BaseModel):
@@ -87,7 +87,7 @@ class MateriaCreate(BaseModel):
 class MateriaOut(MateriaCreate):
     idMateria: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 from pydantic import BaseModel
@@ -99,4 +99,58 @@ class GrupoMateriaCreate(BaseModel):
 class GrupoMateriaOut(GrupoMateriaCreate):
     idGrupoMateria: int
     class Config:
+        from_attributes = True
+from pydantic import BaseModel
+
+class CalificacionCreate(BaseModel):
+    idAlumno: int
+    idMateria: int
+    idDocente: int
+    calUnidad1: float
+    calUnidad2: float
+    calUnidad3: float
+
+class CalificacionOut(CalificacionCreate):
+    idCalificacion: int
+    class Config:
+        from_attributes = True
+from pydantic import BaseModel
+from datetime import date
+
+class AsistenciaCreate(BaseModel):
+    idAlumno: int
+    idMateria: int
+    idDocente: int
+    fecha: date
+    asistencia: bool
+
+class AsistenciaOut(AsistenciaCreate):
+    idAsistencia: int
+    class Config:
+        from_attributes = True
+from pydantic import BaseModel
+from datetime import datetime
+
+class TokenCreate(BaseModel):
+    idUsuario: int
+    token: str
+    fechaExpiracion: datetime
+    utilizado: bool
+
+class TokenOut(TokenCreate):
+    idToken: int
+    fechaGeneracion: datetime
+    class Config:
         orm_mode = True
+from pydantic import BaseModel
+
+class DirectorCreate(BaseModel):
+    idUsuario: int
+    idCarrera: int
+
+class DirectorOut(DirectorCreate):
+    idDirector: int
+    class Config:
+        from_attributes = True
+
+

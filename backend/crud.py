@@ -145,3 +145,73 @@ def crear_grupo_materia(db: Session, asignacion: GrupoMateriaCreate):
 def listar_grupo_materia(db: Session):
     return db.query(GrupoMateria).all()
 
+from models import Calificacion
+from schemas import CalificacionCreate
+
+def crear_calificacion(db: Session, calificacion: CalificacionCreate):
+    nueva = Calificacion(
+        idAlumno=calificacion.idAlumno,
+        idMateria=calificacion.idMateria,
+        idDocente=calificacion.idDocente,
+        calUnidad1=calificacion.calUnidad1,
+        calUnidad2=calificacion.calUnidad2,
+        calUnidad3=calificacion.calUnidad3
+    )
+    db.add(nueva)
+    db.commit()
+    db.refresh(nueva)
+    return nueva
+
+def listar_calificaciones(db: Session):
+    return db.query(Calificacion).all()
+from models import Asistencia
+from schemas import AsistenciaCreate
+
+def crear_asistencia(db: Session, asistencia: AsistenciaCreate):
+    nueva = Asistencia(
+        idAlumno=asistencia.idAlumno,
+        idMateria=asistencia.idMateria,
+        idDocente=asistencia.idDocente,
+        fecha=asistencia.fecha,
+        asistencia=asistencia.asistencia
+    )
+    db.add(nueva)
+    db.commit()
+    db.refresh(nueva)
+    return nueva
+
+def listar_asistencias(db: Session):
+    return db.query(Asistencia).all()
+from models import Token
+from schemas import TokenCreate
+from datetime import datetime
+
+def crear_token(db: Session, token: TokenCreate):
+    nuevo = Token(
+        idUsuario=token.idUsuario,
+        token=token.token,
+        fechaGeneracion=datetime.now(),
+        fechaExpiracion=token.fechaExpiracion,
+        utilizado=token.utilizado
+    )
+    db.add(nuevo)
+    db.commit()
+    db.refresh(nuevo)
+    return nuevo
+
+def listar_tokens(db: Session):
+    return db.query(Token).all()
+
+
+from models import Director
+from schemas import DirectorCreate
+
+def crear_director(db: Session, director: DirectorCreate):
+    nuevo = Director(
+        idUsuario=director.idUsuario,
+        idCarrera=director.idCarrera
+    )
+    db.add(nuevo)
+    db.commit()
+    db.refresh(nuevo)
+    return nuevo

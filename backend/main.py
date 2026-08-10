@@ -30,3 +30,11 @@ from routers import materias
 app.include_router(materias.router)
 from routers import grupo_materia
 app.include_router(grupo_materia.router)
+from routers import calificaciones
+app.include_router(calificaciones.router)
+from routers import asistencias
+app.include_router(asistencias.router)
+from routers import tokens
+app.include_router(tokens.router)
+from routers import seed
+app.include_router(seed.router)
