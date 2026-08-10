@@ -1,0 +1,240 @@
+1. Usuarios
+Objetivo: Tabla principal que representa a cualquier persona dentro del sistema (aspirante, alumno, docente, director).
+
+Campos clave:
+
+idUsuario: identificador único.
+
+nombre, apellido, correo, contraseña.
+
+tipo: define el rol (aspirante, alumno, docente, director).
+
+idCarrera: opcional, solo si el usuario es director de una carrera.
+
+Relaciones:
+
+1:1 con Aspirante, Alumno, Docente.
+
+Opcional con Carrera (si es director).
+
+2. Aspirantes
+Objetivo: Representa a quienes solicitan ingreso a la universidad.
+
+Campos clave:
+
+idAspirante.
+
+idUsuario: vínculo con Usuarios.
+
+numFicha: número único de ficha de ingreso.
+
+periodo: ciclo en el que aplica (ej. Agosto-Diciembre 2026).
+
+carreraSolicita: carrera que desea cursar.
+
+puntosExamen: puntaje obtenido en examen de admisión.
+
+Relaciones:
+
+1:1 con Usuario.
+
+3. Alumnos
+Objetivo: Representa a los estudiantes admitidos.
+
+Campos clave:
+
+idAlumno.
+
+idUsuario: vínculo con Usuarios.
+
+idGrupo: grupo al que pertenece.
+
+promedioPrep: promedio con el que ingresó desde la preparatoria.
+
+Relaciones:
+
+1:1 con Usuario.
+
+N:1 con Grupo.
+
+1:N con Calificaciones y Asistencias.
+
+4. Docentes
+Objetivo: Representa a los profesores de la universidad.
+
+Campos clave:
+
+idDocente.
+
+idUsuario: vínculo con Usuarios.
+
+idCarrera: carrera a la que está asignado.
+
+nivelEstudios: grado académico (Licenciatura, Maestría, etc.).
+
+turno: horario (Matutino, Vespertino).
+
+Relaciones:
+
+1:1 con Usuario.
+
+N:1 con Carrera.
+
+1:N con Grupos.
+
+5. Carreras
+Objetivo: Define cada programa académico.
+
+Campos clave:
+
+idCarrera.
+
+nombreCarrera.
+
+planEstudios: número de semestres/cuatrimestres.
+
+Relaciones:
+
+1:N con Docentes.
+
+1:N con Grupos.
+
+1:N con Materias.
+
+6. Grupos
+Objetivo: Representa las clases organizadas por carrera y periodo.
+
+Campos clave:
+
+idGrupo.
+
+idCarrera: carrera a la que pertenece.
+
+idDocente: docente responsable.
+
+nombreGrupo: identificador (ej. IS-101).
+
+periodo: ciclo académico.
+
+numAlumnos: contador de alumnos asignados.
+
+Reglas de negocio:
+
+Máximo 30 alumnos por grupo.
+
+Máximo 2 grupos por carrera y periodo.
+
+Relaciones:
+
+N:1 con Carrera.
+
+N:1 con Docente.
+
+1:N con Alumnos.
+
+N:M con Materias (a través de GrupoMateria).
+
+7. Materias
+Objetivo: Define las asignaturas de cada carrera.
+
+Campos clave:
+
+idMateria.
+
+nombreMateria.
+
+unidades: número de parciales/unidades.
+
+objetivo: descripción breve.
+
+idCarrera: carrera a la que pertenece.
+
+Relaciones:
+
+N:1 con Carrera.
+
+N:M con Grupos (a través de GrupoMateria).
+
+8. GrupoMateria
+Objetivo: Tabla intermedia para asignar materias a grupos.
+
+Campos clave:
+
+idGrupoMateria.
+
+idGrupo.
+
+idMateria.
+
+Relaciones:
+
+N:1 con Grupo.
+
+N:1 con Materia.
+
+9. Calificaciones
+Objetivo: Registro de notas por alumno, materia y docente.
+
+Campos clave:
+
+idCalificacion.
+
+idAlumno.
+
+idMateria.
+
+idDocente.
+
+calUnidad1, calUnidad2, calUnidad3.
+
+Relaciones:
+
+N:1 con Alumno.
+
+N:1 con Materia.
+
+N:1 con Docente.
+
+10. Asistencias
+Objetivo: Registro de asistencia por alumno, materia y docente.
+
+Campos clave:
+
+idAsistencia.
+
+idAlumno.
+
+idMateria.
+
+idDocente.
+
+fecha.
+
+asistencia: booleano (True = asistió, False = falta).
+
+Relaciones:
+
+N:1 con Alumno.
+
+N:1 con Materia.
+
+N:1 con Docente.
+
+11. Tokens
+Objetivo: Manejo de autenticación y sesiones.
+
+Campos clave:
+
+idToken.
+
+idUsuario.
+
+token: cadena única.
+
+fechaGeneracion, fechaExpiracion.
+
+utilizado: booleano para saber si ya fue consumido.
+
+Relaciones:
+
+N:1 con Usuario.
