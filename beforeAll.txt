@@ -14,4 +14,7 @@ uvicorn main:app --reload
 el servidor de fastapi se ve en:
 http://127.0.0.1:8000/docs
 
+(Al correr el backend es mejor que ya este corriendo el pgadmin
+y ademas, vean que usuario y contra tienen para pgadmin)
+
 
