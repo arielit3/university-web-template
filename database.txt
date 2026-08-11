@@ -1,0 +1,66 @@
+Tabla usuarios
+- idUsuario: clave primaria.
+- nombre, apellido, correo, contraseña, tipo, fechaRegistro, activo.
+- tipo define el rol: aspirante, alumno, docente, director.
+- correo debe ser unico.
+
+Tabla aspirantes
+- idAspirante: clave primaria.
+- idUsuario: referencia a usuarios.
+- numFicha: numero unico de ficha de aspirante.
+- periodo: ciclo de ingreso.
+- carreraSolicita: carrera a la que aplica.
+- puntosExamen: puntuacion del examen de ingreso.
+
+Tabla alumnos
+- idAlumno: clave primaria.
+- idUsuario: referencia a usuarios.
+- idGrupo: referencia al grupo asignado.
+- fechaIngreso: fecha de ingreso.
+- promedioPrep: promedio de preparatoria.
+
+Tabla docentes
+- idDocente: clave primaria.
+- idUsuario: referencia a usuarios.
+- idCarrera: referencia a la carrera que dicta.
+- fechaIngreso, nivelEstudios, turno.
+
+Tabla carreras
+- idCarrera: clave primaria.
+- nombreCarrera, planEstudios.
+- idDirector: usuario con rol director a cargo.
+
+Tabla grupos
+- idGrupo: clave primaria.
+- idCarrera: referencia a carrera.
+- idDocente: referencia a docente.
+- nombreGrupo, periodo, numAlumnos.
+
+Tabla materias
+- idMateria: clave primaria.
+- nombreMateria, unidades, objetivo.
+- idCarrera: referencia a carrera.
+
+Tabla grupo_materias
+- idGrupoMateria: clave primaria.
+- idGrupo: referencia a grupo.
+- idMateria: referencia a materia.
+
+Tabla calificaciones
+- idCalificacion: clave primaria.
+- idAlumno: referencia a alumno.
+- idMateria: referencia a materia.
+- idDocente: referencia a docente.
+- calUnidad1, calUnidad2, calUnidad3.
+
+Tabla asistencias
+- idAsistencia: clave primaria.
+- idAlumno: referencia a alumno.
+- idMateria: referencia a materia.
+- idDocente: referencia a docente.
+- fecha, asistencia.
+
+Tabla tokens
+- idToken: clave primaria.
+- idUsuario: referencia a usuarios.
+- token, fechaGeneracion, fechaExpiracion, utilizado.

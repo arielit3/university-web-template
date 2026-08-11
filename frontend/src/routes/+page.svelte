@@ -205,12 +205,17 @@ en horarios compatibles con tu vida diaria.
 		border: 1px solid rgba(37, 99, 235, 0.18);
 	}
 
+	main {
+		display: grid;
+		gap: 3.5rem;
+	}
+
 	.hero {
 		display: grid;
 		grid-template-columns: minmax(0, 1.2fr) minmax(320px, 1fr);
 		gap: 2rem;
 		align-items: center;
-		padding: 2rem 0 3rem;
+		padding: 3rem 0 4rem;
 	}
 
 	.hero-copy {
@@ -319,7 +324,7 @@ en horarios compatibles con tu vida diaria.
 
 	.story-section,
 	.location-section {
-		padding: 2.5rem 0;
+		padding: 3rem 0;
 	}
 
 	.story-copy {
@@ -357,12 +362,13 @@ en horarios compatibles con tu vida diaria.
 		border-radius: 28px;
 		overflow: hidden;
 		box-shadow: 0 25px 70px rgba(15, 23, 42, 0.08);
-		min-height: 420px;
+		min-height: 480px;
 	}
 
 	.map-card iframe {
 		width: 100%;
 		height: 100%;
+		min-height: 440px;
 		border: 0;
 	}
 

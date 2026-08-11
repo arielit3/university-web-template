@@ -1,31 +1,39 @@
-Antes de ejecutar el backend, debes de crear un entorno virtual y activarlo (ademas de instalar dependencias)
-para esto, de mueves a la carpeta de backend con " cd backend" y luego
-usas el comando:
-python -m venv .venv
-con eso creas un entorno virtual, luego lo activas con solamente el comando:
- .\.venv\Scripts\activate
-luego que lo actives, instalas dependencias de fastapi con:
-pip install fastapi uvicorn
+Antes de ejecutar el backend debes crear un entorno virtual y activarlo.
+
+1. Abre la terminal y cambia a la carpeta del backend:
+   cd backend
+
+2. Crea el entorno virtual:
+   python -m venv .venv
+
+3. Activa el entorno virtual:
+   .\.venv\Scripts\activate
+
+4. Instala las dependencias de Python:
+   pip install fastapi uvicorn sqlalchemy psycopg2-binary python-jose passlib[bcrypt]
+
+5. Configura la base de datos PostgreSQL:
+   - Asegurate de tener un servidor de postgres corriendo.
+   - Crea la base de datos si no existe:
+     createdb sise
+   - Ajusta la URL de conexion en backend/database.py si es necesario.
+
+6. Ejecuta el backend:
+   uvicorn main:app --reload
+
+7. Abre la documentacion interactiva:
+   http://127.0.0.1:8000/docs
+
+Notas:
+- Mantén activo el entorno virtual mientras trabajas en el backend.
+- Si usas pgadmin, verifica usuario y contraseña de postgres.
+- Si necesitas resetear datos, puedes truncar tablas con cuidado.
+- El archivo seed.py crea datos iniciales para usuarios y registros basicos.
 
 
-luego de esto, solamente con ejecutar esto se corre el servidor:
-uvicorn main:app --reload
-
-el servidor de fastapi se ve en:
-http://127.0.0.1:8000/docs
-
-(Al correr el backend es mejor que ya este corriendo el pgadmin
-y ademas, vean que usuario y contra tienen para pgadmin)
-
-para cambiar contrasena a un usuario usan:
+para modificar la contrasena de un usuario de postgres puedes usar:
 ALTER USER postgres WITH PASSWORD 'postgres';
 
-para borrar todos los registros de todas las tablas y usar seed adecuadamente, usa:
-
+Para borrar datos de las tablas de los registros que realiza el seed.py
 TRUNCATE TABLE usuarios CASCADE;
-
-en seed.py hay usuarios creados predeterminadamente para mantener un 
-registro en comun y basico
-
-
 
