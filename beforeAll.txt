@@ -20,5 +20,12 @@ y ademas, vean que usuario y contra tienen para pgadmin)
 para cambiar contrasena a un usuario usan:
 ALTER USER postgres WITH PASSWORD 'postgres';
 
+para borrar todos los registros de todas las tablas y usar seed adecuadamente, usa:
+
+TRUNCATE TABLE usuarios CASCADE;
+
+en seed.py hay usuarios creados predeterminadamente para mantener un 
+registro en comun y basico
+
 
 

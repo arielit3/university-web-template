@@ -19,9 +19,8 @@ class Usuario(Base):
     aspirante = relationship("Aspirante", back_populates="usuario", uselist=False)
     alumno = relationship("Alumno", back_populates="usuario", uselist=False)
     docente = relationship("Docente", back_populates="usuario", uselist=False)
-    # Si es director, opcionalmente puede tener una carrera asignada, asi sabremos que es 
-    # director de esa carrera
-    idCarrera = Column(Integer, ForeignKey("carreras.idCarrera"), nullable=True)
+    # Ya no necesita idCarrera aquí
+
 
 class Aspirante(Base):
     __tablename__ = "aspirantes"
@@ -71,8 +70,8 @@ class Carrera(Base):
     __tablename__ = "carreras"
 
     idCarrera = Column(Integer, primary_key=True, index=True)
-    nombreCarrera = Column(String, unique=True, nullable=False)
-    planEstudios = Column(Integer, nullable=False)  # número de semestres/cuatrimestres
+    nombreCarrera = Column(String, nullable=False)
+    planEstudios = Column(Integer, nullable=False)
 
     # Relación con Docentes
     docentes = relationship("Docente", back_populates="carrera")
@@ -80,6 +79,9 @@ class Carrera(Base):
     grupos = relationship("Grupo", back_populates="carrera")
     # Relación con Materias
     materias = relationship("Materia", back_populates="carrera")
+
+    idDirector = Column(Integer, ForeignKey("usuarios.idUsuario"), nullable=True)
+    director = relationship("Usuario", foreign_keys=[idDirector])
 
 
 class Grupo(Base):

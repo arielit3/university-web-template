@@ -9,6 +9,13 @@ class UsuarioBase(BaseModel):
 class UsuarioCreate(UsuarioBase):
     contraseña: str
 
+
+class UsuarioLogin(BaseModel):
+    correo: str
+    contraseña: str
+    class Config:
+        from_attributes = True
+
 class UsuarioOut(UsuarioBase):
     idUsuario: int
     class Config:
@@ -57,6 +64,7 @@ from pydantic import BaseModel
 class CarreraCreate(BaseModel):
     nombreCarrera: str
     planEstudios: int
+    idDirector: int | None = None
 
 class CarreraOut(CarreraCreate):
     idCarrera: int
@@ -141,16 +149,7 @@ class TokenOut(TokenCreate):
     idToken: int
     fechaGeneracion: datetime
     class Config:
-        orm_mode = True
-from pydantic import BaseModel
-
-class DirectorCreate(BaseModel):
-    idUsuario: int
-    idCarrera: int
-
-class DirectorOut(DirectorCreate):
-    idDirector: int
-    class Config:
         from_attributes = True
+from pydantic import BaseModel
 
 

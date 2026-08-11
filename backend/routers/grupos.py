@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 import crud
 from schemas import GrupoCreate, GrupoOut
+from auth import solo_director
 
 # Definir el router
 router = APIRouter(
@@ -11,7 +12,7 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=GrupoOut)
-def crear_grupo(grupo: GrupoCreate, db: Session = Depends(get_db)):
+def crear_grupo(grupo: GrupoCreate, usuario = Depends(solo_director), db: Session = Depends(get_db)):
     return crud.crear_grupo(db, grupo)
 
 @router.get("/", response_model=list[GrupoOut])
