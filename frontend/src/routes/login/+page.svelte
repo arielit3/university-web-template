@@ -1,17 +1,83 @@
 <script>
 	import { goto } from '$app/navigation';
 
-	let userId = '';
-	let password = '';
+	let userId = $state('');
+	let password = $state('');
 	const domain = '@USN.com';
+	let email = $state('');
+	let canSubmit = $state(false);
+	let loading = $state(false);
+	let errorMsg = $state('');
 
-	const email = $derived(() => userId.trim() ? `${userId.trim()}${domain}` : '');
-	const canSubmit = $derived(() => userId.trim().length > 0 && password.trim().length > 0);
+	$effect(() => {
+		email = userId.trim() ? `${userId.trim()}${domain}` : '';
+	});
 
-	function handleSubmit(event) {
+	$effect(() => {
+		canSubmit = userId.trim().length > 0 && password.trim().length > 0;
+	});
+
+	// Helper: decode JWT payload (no validation, only client-side inspect)
+	function decodeJwtPayload(token) {
+		try {
+			const payload = token.split('.')[1];
+			const padded = payload.padEnd(payload.length + (4 - (payload.length % 4)) % 4, '=');
+			const json = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
+			return JSON.parse(json);
+		} catch (e) {
+			return null;
+		}
+	}
+
+	async function handleSubmit(event) {
 		event.preventDefault();
-		if (!canSubmit) return;
-		goto('/director');
+		if (!canSubmit || loading) return;
+		loading = true;
+		errorMsg = '';
+
+		try {
+			const res = await fetch('http://localhost:8000/auth/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ correo: email, contraseña: password })
+			});
+
+			if (!res.ok) {
+				const body = await res.json().catch(() => ({}));
+				errorMsg = body.detail || body.message || 'Credenciales inválidas';
+				loading = false;
+				return;
+			}
+
+			const data = await res.json();
+			const token = data.access_token;
+			if (!token) {
+				errorMsg = 'Respuesta inválida del servidor';
+				loading = false;
+				return;
+			}
+
+			// Guardar token para uso posterior
+			localStorage.setItem('token', token);
+
+			const payload = decodeJwtPayload(token) || {};
+			console.log('Autenticación OK — payload:', payload);
+
+			if (payload.tipo === 'director') {
+				goto('/director');
+				return;
+			}
+
+			// Usuario autenticado pero no director: mostrar info en consola (por ahora)
+			console.log(`Usuario autenticado: id=${payload.idUsuario}, tipo=${payload.tipo}, nombre=${payload.nombre || ''} ${payload.apellido || ''}`);
+			alert(`Usuario: ${payload.idUsuario}\nTipo: ${payload.tipo}`);
+
+		} catch (err) {
+			console.error(err);
+			errorMsg = 'Error de red. Intenta de nuevo.';
+		} finally {
+			loading = false;
+		}
 	}
 </script>
 
@@ -40,7 +106,7 @@
 					<h1>Inicia sesión con tu cuenta</h1>
 				</div>
 
-				<form on:submit={handleSubmit}>
+				<form onsubmit={handleSubmit}>
 					<div class="field">
 						<label for="userId">Matrícula o número de aspirante</label>
 						<div class="input-suffix">
@@ -69,9 +135,13 @@
 						/>
 					</div>
 
-					<button class="btn btn-primary" type="submit" disabled={!canSubmit}>
-						Iniciar sesión
+					<button class="btn btn-primary" type="submit" disabled={!canSubmit || loading}>
+						{#if loading}Cargando...{:else}Iniciar sesión{/if}
 					</button>
+
+					{#if errorMsg}
+						<p class="error" role="alert">{errorMsg}</p>
+					{/if}
 				</form>
 			</div>
 		</section>

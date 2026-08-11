@@ -9,7 +9,7 @@ from schemas import (
     DocenteCreate, MateriaCreate, GrupoCreate, GrupoMateriaCreate,
     CalificacionCreate, AsistenciaCreate
 )
-from auth import hash_password, solo_admin  # Importamos la función para encriptar contraseñas
+from auth import hash_password  # Importamos la función para encriptar contraseñas
 
 router = APIRouter(
     prefix="/seed",
@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 @router.post("/")
-def generar_seed(usuario = Depends(solo_admin), db: Session = Depends(get_db)):
+def generar_seed(db: Session = Depends(get_db)):
     # --- Crear directores ---
     director1 = crud.crear_usuario(db, UsuarioCreate(
         nombre="Mario", apellido="Lopez",

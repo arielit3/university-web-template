@@ -39,6 +39,20 @@ class AspiranteUpdate(BaseModel):
         from_attributes = True
 
 
+from typing import Optional
+
+class RegistrarAspiranteRequest(BaseModel):
+    idUsuario: Optional[int] = None
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    correo: Optional[str] = None
+    contraseña: Optional[str] = None
+    numFicha: int
+    periodo: str
+    carreraSolicita: str
+    puntosExamen: Optional[int] = 0
+
+
 
 from pydantic import BaseModel
 
