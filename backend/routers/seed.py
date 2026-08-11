@@ -3,11 +3,13 @@ from sqlalchemy.orm import Session
 from database import get_db
 import crud
 import random
+from datetime import date
 from schemas import (
-    CarreraCreate, UsuarioCreate, AlumnoCreate, DocenteCreate,
-    MateriaCreate, GrupoCreate, GrupoMateriaCreate, CalificacionCreate
+    CarreraCreate, UsuarioCreate, AspiranteCreate, AlumnoCreate,
+    DocenteCreate, MateriaCreate, GrupoCreate, GrupoMateriaCreate,
+    CalificacionCreate, AsistenciaCreate
 )
-from auth import hash_password  # Importamos la función para encriptar contraseñas
+from auth import hash_password, solo_admin  # Importamos la función para encriptar contraseñas
 
 router = APIRouter(
     prefix="/seed",
@@ -15,7 +17,7 @@ router = APIRouter(
 )
 
 @router.post("/")
-def generar_seed(db: Session = Depends(get_db)):
+def generar_seed(usuario = Depends(solo_admin), db: Session = Depends(get_db)):
     # --- Crear directores ---
     director1 = crud.crear_usuario(db, UsuarioCreate(
         nombre="Mario", apellido="Lopez",
@@ -97,6 +99,43 @@ def generar_seed(db: Session = Depends(get_db)):
             promedioPrep=round(random.uniform(7.0, 9.5), 2)
         ))
 
+    # --- Crear aspirantes de prueba ---
+    aspirante1_user = crud.crear_usuario(db, UsuarioCreate(
+        nombre="Ana", apellido="Sanchez",
+        correo="Nort_aspirante1@USN.com", contraseña=hash_password("sanchez123"), tipo="aspirante"
+    ))
+    crud.crear_aspirante(db, AspiranteCreate(
+        idUsuario=aspirante1_user.idUsuario,
+        numFicha=1001,
+        periodo="2026-A",
+        carreraSolicita=carrera1.nombreCarrera,
+        puntosExamen=88
+    ))
+
+    aspirante2_user = crud.crear_usuario(db, UsuarioCreate(
+        nombre="Luis", apellido="Morales",
+        correo="Nort_aspirante2@USN.com", contraseña=hash_password("morales123"), tipo="aspirante"
+    ))
+    crud.crear_aspirante(db, AspiranteCreate(
+        idUsuario=aspirante2_user.idUsuario,
+        numFicha=1002,
+        periodo="2026-A",
+        carreraSolicita=carrera2.nombreCarrera,
+        puntosExamen=92
+    ))
+
+    aspirante3_user = crud.crear_usuario(db, UsuarioCreate(
+        nombre="Mariana", apellido="Quintero",
+        correo="Nort_aspirante3@USN.com", contraseña=hash_password("quintero123"), tipo="aspirante"
+    ))
+    crud.crear_aspirante(db, AspiranteCreate(
+        idUsuario=aspirante3_user.idUsuario,
+        numFicha=1003,
+        periodo="2026-A",
+        carreraSolicita=carrera3.nombreCarrera,
+        puntosExamen=95
+    ))
+
     # --- Crear materias ---
     materias_sistemas = [
         MateriaCreate(nombreMateria="Programacion I", unidades=3, objetivo="Fundamentos de programacion", idCarrera=carrera1.idCarrera),
@@ -132,5 +171,15 @@ def generar_seed(db: Session = Depends(get_db)):
                 calUnidad2=round(random.uniform(7.0, 10.0), 2),
                 calUnidad3=round(random.uniform(7.0, 10.0), 2)
             ))
+
+    # --- Crear asistencias de prueba ---
+    for alumno in alumnos[:5]:
+        crud.crear_asistencia(db, AsistenciaCreate(
+            idAlumno=alumno.idAlumno,
+            idMateria=materias[0].idMateria,
+            idDocente=docente1.idDocente,
+            fecha=date.today(),
+            asistencia=True
+        ))
 
     return {"msg": "Seed generado con exito"}

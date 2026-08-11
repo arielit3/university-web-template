@@ -23,13 +23,18 @@ class UsuarioOut(UsuarioBase):
 
 class AspiranteCreate(BaseModel):
     idUsuario: int
-    numFicha: str
+    numFicha: int
     periodo: str
     carreraSolicita: str
     puntosExamen: int
 
 class AspiranteOut(AspiranteCreate):
     idAspirante: int
+    class Config:
+        from_attributes = True
+
+class AspiranteUpdate(BaseModel):
+    puntosExamen: int
     class Config:
         from_attributes = True
 

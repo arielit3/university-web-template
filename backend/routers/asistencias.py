@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 import crud
 from schemas import AsistenciaCreate, AsistenciaOut
-from auth import solo_docente
+from auth import solo_admin, solo_docente
 
 # Definir el router
 router = APIRouter(
@@ -17,5 +17,5 @@ def registrar_asistencia(asistencia: AsistenciaCreate, usuario = Depends(solo_do
     return crud.crear_asistencia(db, asistencia_data)
 
 @router.get("/", response_model=list[AsistenciaOut])
-def listar_asistencias(db: Session = Depends(get_db)):
+def listar_asistencias(usuario = Depends(solo_admin), db: Session = Depends(get_db)):
     return crud.listar_asistencias(db)

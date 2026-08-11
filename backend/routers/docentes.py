@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 import crud
-from schemas import DocenteCreate, DocenteOut
-from auth import solo_docente, solo_director
+from schemas import DocenteCreate, DocenteOut, CalificacionCreate, AsistenciaCreate
+from auth import solo_docente, solo_director, solo_admin
 
 # Definir el router
 router = APIRouter(
@@ -12,11 +12,11 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=DocenteOut)
-def crear_docente(docente: DocenteCreate, usuario = Depends(solo_director), db: Session = Depends(get_db)):
+def crear_docente(docente: DocenteCreate, usuario = Depends(solo_admin), db: Session = Depends(get_db)):
     return crud.crear_docente(db, docente)
 
 @router.get("/", response_model=list[DocenteOut])
-def listar_docentes(db: Session = Depends(get_db)):
+def listar_docentes(usuario = Depends(solo_admin), db: Session = Depends(get_db)):
     return crud.listar_docentes(db)
 
 # --- Docente: ver sus grupos ---
@@ -33,8 +33,6 @@ def mis_alumnos(usuario = Depends(solo_docente), db: Session = Depends(get_db)):
 @router.get("/mis-materias")
 def mis_materias(usuario = Depends(solo_docente), db: Session = Depends(get_db)):
     return crud.listar_materias_por_docente(db, usuario.idUsuario)
-
-from schemas import CalificacionCreate, AsistenciaCreate
 
 # --- Docente: registrar calificación ---
 @router.post("/registrar-calificacion")

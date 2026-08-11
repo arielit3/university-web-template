@@ -15,6 +15,8 @@ router = APIRouter(
 def asignar_materia_a_grupo(asignacion: GrupoMateriaCreate, usuario = Depends(solo_director), db: Session = Depends(get_db)):
     return crud.crear_grupo_materia(db, asignacion)
 
+from auth import solo_admin
+
 @router.get("/", response_model=list[GrupoMateriaOut])
-def listar_asignaciones(db: Session = Depends(get_db)):
+def listar_asignaciones(usuario = Depends(solo_admin), db: Session = Depends(get_db)):
     return crud.listar_grupo_materia(db)

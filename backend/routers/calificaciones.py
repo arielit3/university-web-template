@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 import crud
 from schemas import CalificacionCreate, CalificacionOut
-from auth import solo_docente
+from auth import solo_admin, solo_docente
 
 # Definir el router
 router = APIRouter(
@@ -18,5 +18,5 @@ def crear_calificacion(calificacion: CalificacionCreate, usuario = Depends(solo_
     return crud.crear_calificacion(db, cal_data)
 
 @router.get("/", response_model=list[CalificacionOut])
-def listar_calificaciones(db: Session = Depends(get_db)):
+def listar_calificaciones(usuario = Depends(solo_admin), db: Session = Depends(get_db)):
     return crud.listar_calificaciones(db)
