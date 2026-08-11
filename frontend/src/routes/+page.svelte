@@ -12,7 +12,7 @@
 			</div>
 		</div>
 
-		<a class="btn btn-outline" href="#" aria-label="Iniciar sesión">Iniciar sesión</a>
+		<a class="btn btn-outline" href="/login" aria-label="Iniciar sesión">Iniciar sesión</a>
 	</header>
 
 	<main>
@@ -117,7 +117,7 @@ en horarios compatibles con tu vida diaria.
 
 	<footer class="site-footer">
 		<div>© 2026 Universidad Sabatina del Norte</div>
-		<div>contacto@sabatina.edu | +52 (81) 1234 5678</div>
+		<div>contacto@USN.edu | +52 (656) 766 3221</div>
 	</footer>
 </div>
 
